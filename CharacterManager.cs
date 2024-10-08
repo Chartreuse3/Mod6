@@ -1,5 +1,9 @@
 class CharacterManager
 {
+    private string csvFilePath = "mario.csv";
+
+    public void DisplayCharacters()
+    {
         if (System.IO.File.Exists(csvFilePath))
         {
             string[] characters = System.IO.File.ReadAllLines(csvFilePath);
@@ -12,4 +16,11 @@ class CharacterManager
         {
             Console.WriteLine("No characters found.");
         }
+    }
+
+    public void AddCharacter(Character character)
+    {
+        System.IO.File.AppendAllText(csvFilePath, character.GetInfo() + System.Environment.NewLine);
+        Console.WriteLine("Character added!");
+    }
 }
