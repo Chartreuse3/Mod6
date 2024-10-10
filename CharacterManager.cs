@@ -1,26 +1,46 @@
+using NLog;
+
 class CharacterManager
 {
     private string csvFilePath = "mario.csv";
+    private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
     public void DisplayCharacters()
     {
-        if (System.IO.File.Exists(csvFilePath))
+        try
         {
-            string[] characters = System.IO.File.ReadAllLines(csvFilePath);
-            foreach (string character in characters)
+            if (System.IO.File.Exists(csvFilePath))
             {
-                Console.WriteLine(character);
+                string[] characters = System.IO.File.ReadAllLines(csvFilePath);
+                foreach (string character in characters)
+                {
+                    Console.WriteLine(character);
+                }
+                logger.Info("Displayed all characters.");
+            }
+            else
+            {
+                Console.WriteLine("No characters found.");
+                logger.Warn("Character file not found.");
             }
         }
-        else
+        catch (Exception ex)
         {
-            Console.WriteLine("No characters found.");
+            logger.Error(ex, "Error displaying characters.");
         }
     }
 
     public void AddCharacter(Character character)
     {
-        System.IO.File.AppendAllText(csvFilePath, character.GetInfo() + System.Environment.NewLine);
-        Console.WriteLine("Character added!");
+        try
+        {
+            System.IO.File.AppendAllText(csvFilePath, character.ToString() + System.Environment.NewLine);
+            Console.WriteLine("Character added!");
+            logger.Info($"Character {character.Name} added successfully.");
+        }
+        catch (Exception ex)
+        {
+            logger.Error(ex, "Error adding character.");
+        }
     }
 }

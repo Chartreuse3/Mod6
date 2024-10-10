@@ -1,7 +1,9 @@
-// This is the newer, more concise main class now.
+using NLog;
 
 class Program
 {
+    private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
     static void Main()
     {
         CharacterManager manager = new CharacterManager();
@@ -9,11 +11,12 @@ class Program
 
         while (running)
         {
+            logger.Info("Application started.");
             Console.WriteLine("Menu:");
             Console.WriteLine("1. Display all characters");
             Console.WriteLine("2. Add a new character");
             Console.WriteLine("3. Exit");
-            
+
             string choice = Console.ReadLine();
 
             if (choice == "1")
@@ -23,7 +26,7 @@ class Program
             else if (choice == "2")
             {
                 Console.WriteLine("Enter character details:");
-                
+
                 Console.Write("ID: ");
                 string id = Console.ReadLine();
 
@@ -49,10 +52,12 @@ class Program
             {
                 running = false;
                 Console.WriteLine("Application ended.");
+                logger.Info("Application ended.");
             }
             else
             {
                 Console.WriteLine("Invalid choice, try again.");
+                logger.Warn("Invalid menu choice entered.");
             }
         }
     }
